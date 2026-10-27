@@ -19,7 +19,7 @@ const MAX = 100;
 fs.mkdirSync(path.join(__dirname, "uploads"), { recursive: true });
 
 app.use(express.json({ limit: "1mb" }));
-
+app.set("trust proxy", 1);
 app.use(
   session({
     name: "freshtrack.sid",
