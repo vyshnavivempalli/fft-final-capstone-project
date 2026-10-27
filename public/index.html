@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#176b4d">
+  <title>FreshTrack | Smart Food Management</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status"></div>
+
+  <!-- LOGIN AND REGISTRATION -->
+  <main id="authView" class="auth-layout">
+    <section class="auth-brand">
+      <div class="brand-logo">F<span>+</span></div>
+      <p class="eyebrow">SMART FOOD MANAGEMENT</p>
+      <h1>Fresh food.<br>Less waste.</h1>
+      <p class="auth-description">
+        Keep track of inventory, reduce food waste, and connect surplus
+        food with the people who need it.
+      </p>
+      <div class="auth-stat-row">
+        <div><strong>100</strong><span>Product limit</span></div>
+        <div><strong>24/7</strong><span>Inventory access</span></div>
+        <div><strong>1 goal</strong><span>Less food waste</span></div>
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div id="loginPane">
+        <p class="eyebrow">WELCOME BACK</p>
+        <h2>Sign in to FreshTrack</h2>
+        <p class="muted">Manage your food inventory in one place.</p>
+
+        <form id="loginForm">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" type="email" required autocomplete="email"
+                 placeholder="you@example.com">
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" required
+                 autocomplete="current-password" placeholder="Enter password">
+
+          <button class="btn primary full" type="submit">Sign in</button>
+        </form>
+
+        <p class="auth-switch">
+          Don't have an account?
+          <button id="showRegister" class="text-btn" type="button">
+            Create account
+          </button>
+        </p>
+      </div>
+
+      <div id="registerPane" hidden>
+        <p class="eyebrow">GET STARTED</p>
+        <h2>Create your account</h2>
+        <p class="muted">Join the FreshTrack community.</p>
+
+        <form id="registerForm">
+          <label for="regName">Full name</label>
+          <input id="regName" required maxlength="100" placeholder="Your name">
+
+          <label for="regEmail">Email address</label>
+          <input id="regEmail" type="email" required placeholder="you@example.com">
+
+          <label for="regPassword">Password</label>
+          <input id="regPassword" type="password" required minlength="8"
+                 autocomplete="new-password" placeholder="Create a password">
+
+          <label for="regRole">Account type</label>
+          <select id="regRole" required>
+            <option value="shopkeeper">Shopkeeper</option>
+            <option value="ngo">NGO</option>
+          </select>
+
+          <label for="regShop">Shop or organisation name</label>
+          <input id="regShop" maxlength="120" placeholder="Organisation name">
+
+          <button class="btn primary full" type="submit">Create account</button>
+        </form>
+
+        <p class="auth-switch">
+          Already registered?
+          <button id="showLogin" class="text-btn" type="button">
+            Sign in
+          </button>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- MAIN APPLICATION -->
+  <div id="appView" class="app-layout" hidden>
+    <aside id="sidebar" class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-logo small-logo">F<span>+</span></span>
+        <span>FreshTrack<small>Food management</small></span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+
+      <button class="nav-link shop-only" data-page="shopDashboard">
+        <span>▦</span> Overview
+      </button>
+
+      <button class="nav-link admin-only" data-page="adminDashboard">
+        <span>▦</span> Admin overview
+      </button>
+
+      <button class="nav-link shop-only" data-page="inventoryPage">
+        <span>▤</span> Inventory
+      </button>
+
+      <button class="nav-link shop-only" data-page="offersPage">
+        <span>％</span> Offers
+      </button>
+
+      <button class="nav-link" data-page="donationsPage">
+        <span>♡</span> Donations
+      </button>
+
+      <button class="nav-link" data-page="messagesPage">
+        <span>✉</span> Messages
+      </button>
+
+      <button class="nav-link shop-only" data-page="wastePage">
+        <span>♻</span> Waste tracking
+      </button>
+
+      <button class="nav-link admin-only" data-page="usersPage">
+        <span>♙</span> Users & licences
+      </button>
+
+      <button class="nav-link admin-only" data-page="ngoPage">
+        <span>⌂</span> NGO directory
+      </button>
+
+      <button class="nav-link" data-page="reviewsPage">
+        <span>☆</span> Reviews
+      </button>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-help">
+          <span>🌱</span>
+          <b>Small steps, big impact.</b>
+          <p>Every saved meal matters.</p>
+        </div>
+
+        <button id="logoutBtn" class="nav-link logout">
+          <span>↪</span> Sign out
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button id="menuBtn" class="menu-btn" aria-label="Toggle navigation">☰</button>
+
+        <div>
+          <p class="eyebrow">FRESHTRACK WORKSPACE</p>
+          <h1 id="pageTitle">Overview</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="refreshBtn" class="btn ghost">↻ Refresh</button>
+
+          <div class="notification-wrap">
+            <button id="notificationBtn" class="icon-btn notification-button"
+                    aria-label="Notifications">
+              ♧ <span id="notificationCount" class="notification-count">0</span>
+            </button>
+
+            <div id="notificationPanel" class="notification-panel" hidden>
+              <div class="panel-heading">
+                <b>Notifications</b>
+                <button id="markReadBtn" class="text-btn">Mark all read</button>
+              </div>
+              <div id="notificationList"></div>
+            </div>
+          </div>
+
+          <div class="user-chip">
+            <span id="userAvatar" class="avatar">F</span>
+            <span><b id="userName">User</b><small id="userRole">ROLE</small></span>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <!-- SHOPKEEPER OVERVIEW -->
+        <section id="shopDashboard" class="page">
+          <div class="welcome-banner">
+            <div>
+              <p class="eyebrow">YOUR FOOD, YOUR IMPACT</p>
+              <h2>Let's keep food fresh.</h2>
+              <p>Monitor stock, catch expiry dates early, and help reduce waste.</p>
+            </div>
+            <div class="welcome-art">🌿</div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span class="stat-icon green">▤</span>
+              <p>Total products</p>
+              <strong id="shopProductCount">0</strong>
+              <small id="shopLimit">0 / 100</small>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-icon orange">◷</span>
+              <p>Expiring soon</p>
+              <strong id="shopNear">0</strong>
+              <small>Within 7 days</small>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-icon red">!</span>
+              <p>Expired products</p>
+              <strong id="shopExpired">0</strong>
+              <small>Review these items</small>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-icon blue">♡</span>
+              <p>Donations</p>
+              <strong id="shopDonationCount">0</strong>
+              <small>Donation records</small>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-heading">
+                <div><h3>Expiry alerts</h3><p>Products needing attention</p></div>
+                <button class="text-btn" data-page="inventoryPage">View inventory →</button>
+              </div>
+              <div id="expiryList"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading">
+                <div><h3>Inventory capacity</h3><p>Product storage limit</p></div>
+              </div>
+              <div class="capacity-number">
+                <strong id="shopLimitDisplay">0 / 100</strong>
+              </div>
+              <div class="progress-track"><div id="itemLimitBar" class="progress-bar"></div></div>
+              <p id="itemLimitText" class="muted">0 of 100 products used</p>
+              <div class="impact-note">🌱 <span>Keep your stock updated to reduce avoidable food waste.</span></div>
+            </article>
+          </div>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h3>Inventory snapshot</h3><p>Quick look at your stock</p></div>
+              <button class="text-btn" data-page="inventoryPage">Manage stock →</button>
+            </div>
+            <div class="snapshot-grid">
+              <div><span class="snapshot-dot green-dot"></span><span>Fresh</span><b id="freshCount">0</b></div>
+              <div><span class="snapshot-dot orange-dot"></span><span>Expiring soon</span><b id="shopNear">0</b></div>
+              <div><span class="snapshot-dot red-dot"></span><span>Expired</span><b id="shopExpired">0</b></div>
+            </div>
+          </article>
+        </section>
+
+        <!-- ADMIN OVERVIEW -->
+        <section id="adminDashboard" class="page" hidden>
+          <div class="welcome-banner">
+            <div>
+              <p class="eyebrow">ADMINISTRATION</p>
+              <h2>Welcome to your control centre.</h2>
+              <p>Manage users, licences, donations, and community activity.</p>
+            </div>
+            <div class="welcome-art">🛡️</div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card"><p>Shopkeepers</p><strong id="adminShops">0</strong></article>
+            <article class="stat-card"><p>NGOs</p><strong id="adminNgos">0</strong></article>
+            <article class="stat-card"><p>Pending licences</p><strong id="adminPending">0</strong></article>
+            <article class="stat-card"><p>Open donations</p><strong id="adminDonations">0</strong></article>
+            <article class="stat-card"><p>Products</p><strong id="adminProducts">0</strong></article>
+            <article class="stat-card"><p>Recent messages</p><strong id="adminMessages">0</strong></article>
+          </div>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h3>Recent platform activity</h3><p>Manage registered users below</p></div>
+              <button class="btn primary small" data-page="usersPage">Manage users</button>
+            </div>
+            <p class="muted">Use the Users & licences section to review registrations and licence submissions.</p>
+          </article>
+        </section>
+
+        <!-- INVENTORY -->
+        <section id="inventoryPage" class="page" hidden>
+          <div class="section-intro">
+            <div><h2>Product inventory</h2><p>Add products and monitor their expiry dates.</p></div>
+          </div>
+
+          <article class="panel shop-only">
+            <div class="panel-heading">
+              <div><h3 id="productFormHeading">Add a product</h3><p>Keep product information accurate.</p></div>
+            </div>
+
+            <form id="productForm" class="form-grid">
+              <div class="field">
+                <label for="productName">Product name</label>
+                <input id="productName" required maxlength="120" placeholder="e.g. Fresh milk">
+              </div>
+
+              <div class="field">
+                <label for="category">Category</label>
+                <select id="category" required>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Bakery">Bakery</option>
+                  <option value="Grains">Grains</option>
+                  <option value="Packaged">Packaged</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="quantity">Quantity</label>
+                <input id="quantity" type="number" min="0" required placeholder="0">
+              </div>
+
+              <div class="field">
+                <label for="expiryDate">Expiry date</label>
+                <input id="expiryDate" type="date" required>
+              </div>
+
+              <div class="field">
+                <label for="price">Unit price (₹)</label>
+                <input id="price" type="number" min="0" step="0.01" value="0">
+              </div>
+
+              <div class="field field-wide">
+                <label for="notes">Notes (optional)</label>
+                <input id="notes" maxlength="500" placeholder="Storage or product notes">
+              </div>
+
+              <div class="field-wide form-actions">
+                <button id="saveProductBtn" class="btn primary" type="submit">＋ Add product</button>
+                <button id="cancelEditBtn" class="btn ghost" type="button" hidden>Cancel edit</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h3>All products</h3><p id="inventoryTotal">0</p></div>
+              <input id="searchProducts" class="search-input" placeholder="Search products...">
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Product</th><th>Quantity</th><th>Expiry date</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="inventoryBody"></tbody>
+              </table>
+            </div>
+            <div id="inventoryEmpty" class="empty-state" hidden>No matching products found.</div>
+          </article>
+        </section>
+
+        <!-- OFFERS -->
+        <section id="offersPage" class="page" hidden>
+          <div class="section-intro"><div><h2>Discount offers</h2><p>Help customers discover products nearing expiry.</p></div></div>
+
+          <article class="panel shop-only">
+            <div class="panel-heading"><div><h3>Create an offer</h3><p>Choose an existing inventory product.</p></div></div>
+            <form id="offerForm" class="form-grid">
+              <div class="field field-wide"><label for="offerProduct">Product</label><select id="offerProduct" required></select></div>
+              <div class="field"><label for="discountPercent">Discount (%)</label><input id="discountPercent" type="number" min="1" max="90" required></div>
+              <div class="field"><label for="offerDescription">Description</label><input id="offerDescription" maxlength="300" placeholder="Limited-time offer"></div>
+              <div class="field-wide"><button class="btn primary" type="submit">Publish offer</button></div>
+            </form>
+          </article>
+
+          <div id="offersList" class="card-grid"></div>
+        </section>
+
+        <!-- DONATIONS -->
+        <section id="donationsPage" class="page" hidden>
+          <div class="section-intro"><div><h2>Food donations</h2><p>Coordinate surplus food with registered organisations.</p></div></div>
+
+          <article class="panel shop-only">
+            <div class="panel-heading"><div><h3>Offer a donation</h3><p>Send a request to a registered NGO.</p></div></div>
+            <form id="donationForm" class="form-grid">
+              <div class="field field-wide"><label for="donationProduct">Product</label><select id="donationProduct" required></select></div>
+              <div class="field"><label for="donationQuantity">Quantity</label><input id="donationQuantity" type="number" min="1" required></div>
+              <div class="field"><label for="donationNgo">NGO</label><select id="donationNgo" required></select></div>
+              <div class="field field-wide"><label for="donationNotes">Notes</label><input id="donationNotes" maxlength="500" placeholder="Pickup details or food condition"></div>
+              <div class="field-wide"><button class="btn primary" type="submit">Send donation request</button></div>
+            </form>
+          </article>
+
+          <div id="ngoDonationCount" class="ngo-only stat-card"><p>Your donation records</p><strong>0</strong></div>
+          <div id="ngoOpenCount" class="ngo-only stat-card"><p>Open requests</p><strong>0</strong></div>
+          <div id="donationsList" class="card-grid"></div>
+        </section>
+
+        <!-- MESSAGES -->
+        <section id="messagesPage" class="page" hidden>
+          <div class="section-intro"><div><h2>Messages</h2><p>Communicate with your FreshTrack community.</p></div></div>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Send a message</h3><p>Contact an authorised recipient.</p></div></div>
+            <form id="messageForm" class="form-grid">
+              <div id="messageRecipientWrap" class="field field-wide" hidden>
+                <label for="messageRecipient">Recipient</label>
+                <select id="messageRecipient"></select>
+              </div>
+              <div class="field field-wide"><label for="messageSubject">Subject</label><input id="messageSubject" maxlength="150" required></div>
+              <div class="field field-wide"><label for="messageBody">Message</label><textarea id="messageBody" rows="4" maxlength="3000" required></textarea></div>
+              <div class="field-wide"><button class="btn primary" type="submit">Send message</button></div>
+            </form>
+          </article>
+
+          <div id="messagesList" class="stack-list"></div>
+        </section>
+
+        <!-- WASTE TRACKING -->
+        <section id="wastePage" class="page" hidden>
+          <div class="section-intro"><div><h2>Waste tracking</h2><p>Record discarded food to understand and reduce waste.</p></div></div>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Log food waste</h3><p>Record the product, quantity, and reason.</p></div></div>
+            <form id="wasteForm" class="form-grid">
+              <div class="field"><label for="wasteProductName">Product</label><input id="wasteProductName" required maxlength="120"></div>
+              <div class="field"><label for="wasteQuantity">Quantity wasted</label><input id="wasteQuantity" type="number" min="1" required></div>
+              <div class="field field-wide"><label for="wasteReason">Reason</label><select id="wasteReason" required><option value="Expired">Expired</option><option value="Damaged">Damaged</option><option value="Spoiled">Spoiled</option><option value="Unsold">Unsold</option><option value="Other">Other</option></select></div>
+              <div class="field field-wide"><label for="wasteNotes">Notes</label><textarea id="wasteNotes" rows="3" maxlength="500"></textarea></div>
+              <div class="field-wide"><button class="btn primary" type="submit">Save waste record</button></div>
+            </form>
+          </article>
+
+          <article class="panel"><div class="panel-heading"><div><h3>Waste history</h3><p>Your recorded waste entries</p></div></div><div id="wasteList"></div></article>
+        </section>
+
+        <!-- USERS AND LICENCES -->
+        <section id="usersPage" class="page admin-only" hidden>
+          <div class="section-intro"><div><h2>Users & licences</h2><p>Review registrations and licence requests.</p></div></div>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Registered users</h3><p>Enable or disable accounts.</p></div></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>User</th><th>Role</th><th>Organisation</th><th>Licence</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="usersTable"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Licence submissions</h3><p>Approve or reject pending applications.</p></div></div>
+            <div id="licenceList" class="card-grid"></div>
+          </article>
+        </section>
+
+        <!-- NGO DIRECTORY -->
+        <section id="ngoPage" class="page admin-only" hidden>
+          <div class="section-intro"><div><h2>NGO directory</h2><p>Contact registered food donation organisations.</p></div></div>
+          <article class="panel"><div class="panel-heading"><div><h3>Registered NGOs</h3><p>Active organisation accounts</p></div></div><div id="ngoDirectory"></div></article>
+        </section>
+
+        <!-- REVIEWS -->
+        <section id="reviewsPage" class="page" hidden>
+          <div class="section-intro"><div><h2>Community reviews</h2><p>Share feedback to improve FreshTrack.</p></div></div>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Leave a review</h3><p>Tell us about your experience.</p></div></div>
+            <form id="reviewForm" class="form-grid">
+              <div class="field"><label for="rating">Rating</label><select id="rating" required><option value="5">5 - Excellent</option><option value="4">4 - Very good</option><option value="3">3 - Good</option><option value="2">2 - Fair</option><option value="1">1 - Poor</option></select></div>
+              <div class="field field-wide"><label for="reviewComment">Your review</label><textarea id="reviewComment" rows="3" maxlength="2000" required></textarea></div>
+              <div class="field-wide"><button class="btn primary" type="submit">Submit review</button></div>
+            </form>
+          </article>
+
+          <div id="reviewsList" class="stack-list"></div>
+        </section>
+
+      </div>
+
+      <footer class="footer">
+        <span>FreshTrack ©️ 2026</span>
+        <span>Smart inventory · Less waste · Stronger communities</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
